@@ -16,7 +16,7 @@ import Login from './paginas/Login/Login';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import {Box} from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 import './App.css';
 
@@ -27,12 +27,36 @@ function App() {
   return (
     <>
 
-   
-    <Navbar></Navbar>
-    <Home></Home>
-    <Footer></Footer>
 
-      
+      <Router>
+
+        <Switch>
+
+          <Route exact path='/'>
+            <Login />
+          </Route>
+
+          <Route path='/login'>
+            <Login />
+          </Route>
+
+          <Route path='/cadastrousuario'>
+            <CadastroUsuario />
+          </Route>
+
+          <Navbar />
+
+          <Route path='/home'>
+            <Home />
+          </Route>
+
+
+
+        </Switch>
+
+      </Router>
+
+
     </>
 
 
