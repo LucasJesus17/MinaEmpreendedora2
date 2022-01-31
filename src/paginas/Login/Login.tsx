@@ -1,64 +1,92 @@
-import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import { styled } from '@mui/material/styles';
+import {Box, Grid, Typography, TextField, Button } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
-import useLocalStorage from "react-use-localstorage";
-import { login } from "../../services/Service";
-import UserLogin from "../../models/UserLogin";
-import React, { ChangeEvent, useState, useEffect } from "react";
-import "./Login.css";
+import Paper from '@mui/material/Paper';
+import { useDispatch } from 'react-redux';
+import { addToken } from "../../store/token/actions";
+import { toast } from 'react-toastify';
+import { login } from '../../services/Service';
+import UserLogin from '../../models/UserLogin';
+import './Login.css';
 
-function Login() {
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
+export default function RowAndColumnSpacing() {
     let history = useHistory();
-    const [token, setToken] = useLocalStorage("token");
+    const dispatch = useDispatch();
+    const [token, setToken] = useState('');
     const [userLogin, setUserLogin] = useState<UserLogin>(
         {
             id: 0,
-            usuario: "",
-            senha: "",
-            token: ""
+            usuario: '',
+            senha: '',
+            token: ''
         }
-    )
+        )
 
-    function updatedModel(e: ChangeEvent<HTMLInputElement>) {
+        function updatedModel(e: ChangeEvent<HTMLInputElement>) {
 
-        setUserLogin({
-            ...userLogin,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    useEffect(() => {
-        if (token != "") {
-            history.push("/home")
+            setUserLogin({
+                ...userLogin,
+                [e.target.name]: e.target.value
+            })
         }
-    }, [token])
 
-    async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
-        e.preventDefault();
-        try {
-            await login(`/usuarios/logar`, userLogin, setToken)
+            useEffect(()=>{
+                if(token != ''){
+                    dispatch(addToken(token));
+                    history.push('/home')
+                }
+            }, [token])
 
-            alert("usuario logado com sucesso!");
-        } catch (error) {
-            alert("Dados do usúarios inconsistentes. Erro ao logar!");
+        async function onSubmit(e: ChangeEvent<HTMLFormElement>){
+            e.preventDefault();
+            try{
+                await login(`/usuarios/logar`, userLogin, setToken)
+                toast.success('Usuário logado com sucesso!', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                    });
+            }catch(error){
+                toast.error('Dados do usuário inconsistentes. Erro ao logar!', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                    });
+            }
         }
-    }
 
-    return (
-   
-        <Grid container className='pagina'>
-            <Grid xs={6} className='imagem'>
-            </Grid>
-            <Grid alignItems="center" xs={6}>
-                <Box paddingX={20}>
-                    <form>
-                        <Typography variant='h3' gutterBottom component='h3' align='center' className='textos1'>Entrar</Typography>
-                        <TextField id='usuario' label='usuario' variant='outlined' name='usuario' margin='normal' fullWidth />
-                        <TextField id='senha' label='senha' variant='outlined' name='senha' margin='normal' type='password' fullWidth />
+  return (
+    <Box sx={{ width: '100%' }} className='mg'>
+      <Grid container>
+        <Grid item xs={12} sm={12} md={6} className='imagem'>
+        </Grid>
+        <Grid item xs={12} sm={12} md={5}>
+                    <form onSubmit={onSubmit}>
+                        <Typography variant='h3' gutterBottom color='textPrimary' component='h3' align='center' className='textos1'>Entrar</Typography>
+                        <TextField value={userLogin.usuario} onChange={(e:ChangeEvent<HTMLInputElement>) => updatedModel(e)} id='usuario' label='usuário' variant='outlined' name='usuario' margin='normal' fullWidth />
+                        <TextField value={userLogin.senha} onChange={(e:ChangeEvent<HTMLInputElement>) => updatedModel(e)} id='senha' label='senha' variant='outlined' name='senha' margin='normal' type='password'fullWidth />
                         <Box marginTop={2} textAlign='center'>
-                            <Link to='/home' className='text-decorator-none'>
-                                <Button type='submit' variant='contained' className="butao">
-                                    Logar</Button>
-                            </Link>
+                                <Button type='submit' variant='contained' className="butao text-decorator-none">
+                                    Logar
+                                </Button>
                         </Box>
                     </form>
                     <Box display='flex' justifyContent='center' marginTop={2}>
@@ -69,10 +97,9 @@ function Login() {
                             <Typography variant="subtitle1" gutterBottom align="center" className='textos1'>Cadastre-se</Typography>
                         </Link>
                     </Box>
-                </Box>
-            </Grid>
+              
         </Grid>
-    )
+      </Grid>
+    </Box>
+  );
 }
-
-export default Login;

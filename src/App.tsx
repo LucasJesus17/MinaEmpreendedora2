@@ -16,7 +16,14 @@ import Login from './paginas/Login/Login';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { Box } from '@material-ui/core';
+
+import { Provider } from 'react-redux';
+
+import store from './store/store';
+
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
 
@@ -27,35 +34,34 @@ function App() {
   return (
     <>
 
+      <Provider store={store}>
+        <ToastContainer />
+        <Navbar />
+        <Router>
+        
 
-      <Router>
+          <Switch>
+              <Route exact path='/'>
+                <Login />
+              </Route>
 
-        <Switch>
+              <Route path='/login'>
+                <Login />
+              </Route>
 
-          <Route exact path='/'>
-            <Login />
-          </Route>
+              <Route path='/cadastrousuario'>
+                <CadastroUsuario />
+              </Route>
 
-          <Route path='/login'>
-            <Login />
-          </Route>
+              <Route path='/home'>
+                <Home />
+              </Route>
 
-          <Route path='/cadastrousuario'>
-            <CadastroUsuario />
-          </Route>
+  
+          </Switch>
 
-          <Navbar />
-
-          <Route path='/home'>
-            <Home />
-          </Route>
-
-
-
-        </Switch>
-
-      </Router>
-
+        </Router>
+      </Provider>
 
     </>
 

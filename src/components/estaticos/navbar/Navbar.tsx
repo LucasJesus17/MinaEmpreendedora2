@@ -16,12 +16,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/token/tokenReducer';
+
 import './Navbar.css';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.white, 0.50),
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
@@ -29,7 +32,7 @@ const Search = styled('div')(({ theme }) => ({
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
+        marginLeft: theme.spacing(26),
         width: 'auto',
     },
 }));
@@ -94,6 +97,7 @@ export default function PrimarySearchAppBar() {
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
+                
             }}
             id={mobileMenuId}
             keepMounted
@@ -103,15 +107,17 @@ export default function PrimarySearchAppBar() {
             }}
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
+        
         >
-
-            <MenuItem>
-                <IconButton size="large" aria-label="show 10 new mails" color="inherit">
+            
+            <MenuItem >
+                <IconButton size="large" aria-label="show 10 new mails" color="inherit" >
                     <Badge badgeContent={10} color="error">
                         <HomeIcon />
                     </Badge>
+                    
                 </IconButton>
-                <p>Inicio</p>
+                <p >Inicio</p>
             </MenuItem>
             <MenuItem>
                 <IconButton size="large" aria-label="show 10 new mails" color="inherit">
@@ -156,89 +162,105 @@ export default function PrimarySearchAppBar() {
         </Menu>
     );
 
-    return (
-        <Box sx={{ flexGrow: 1 }} >
-            <AppBar position="static">
-                <Toolbar sx={{ backgroundColor: '#800000' }}>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
-                    >
-                        Mina Empreendedora
-                    </Typography>
-
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}  >
-
-                        <IconButton size="large" aria-label="show34 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <HomeIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton size="large" aria-label="show34 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <PersonIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
-                                <ChatBubbleIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                        >
-                            <Badge badgeContent={17} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                    </Box>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Pesquisar..."
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
-
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-
-                        <IconButton
-                            size="large"
-
-                            color="inherit"
-                        >
-                            <Badge>
-                                <LogoutIcon />
-                            </Badge>
-                        </IconButton>
-
-                    </Box>
-
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                            size="large"
-                            aria-label="show more"
-                            aria-controls={mobileMenuId}
-                            aria-haspopup="true"
-                            onClick={handleMobileMenuOpen}
-                            color="inherit"
-                        >
-                            <MoreIcon />
-                        </IconButton>
-                    </Box>
-
-
-                </Toolbar>
-            </AppBar>
-            {renderMobileMenu}
-
-        </Box>
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
     );
+
+
+    var navbarComponent;
+
+    if (token != "") {
+        navbarComponent =
+            <Box sx={{ flexGrow: 1 }} >
+                <AppBar position="static">
+                    <Toolbar sx={{ backgroundColor: '#800000' }}>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                        >
+                            Mina Empreendedora
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}  >
+
+                            <IconButton size="large" aria-label="show34 new mails" color="inherit" style={{padding: '10px'}}>
+                                <Badge badgeContent={4} color="error">
+                                    <HomeIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton size="large" aria-label="show34 new mails" color="inherit" style={{padding: '10px'}}>
+                                <Badge badgeContent={4} color="error">
+                                    <PersonIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton size="large" aria-label="show 4 new mails" color="inherit" style={{padding: '10px'}}>
+                                <Badge badgeContent={4} color="error">
+                                    <ChatBubbleIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton
+                                size="large"
+                                aria-label="show 17 new notifications"
+                                color="inherit"
+                                style={{padding: '10px'}}
+                            >
+                                <Badge badgeContent={17} color="error">
+                                    <NotificationsIcon />
+                                </Badge>
+                            </IconButton>
+                        </Box>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Pesquisar..."
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </Search>
+
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+
+                            <IconButton
+                                size="large"
+
+                                color="inherit"
+                            >
+                                <Badge>
+                                    <LogoutIcon />
+                                </Badge>
+                            </IconButton>
+
+                        </Box>
+
+                        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="show more"
+                                aria-controls={mobileMenuId}
+                                aria-haspopup="true"
+                                onClick={handleMobileMenuOpen}
+                                color="inherit"
+                            >
+                                <MoreIcon />
+                            </IconButton>
+                        </Box>
+
+
+                    </Toolbar>
+                </AppBar>
+            </Box>
+    }
+    
+    return (
+        <>
+            {navbarComponent}
+            {renderMobileMenu}
+        </>
+
+    );
+
 }
